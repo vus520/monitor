@@ -1,0 +1,14 @@
+.settings/
+.DS_Store
+.project
+.metadata
+*.properties
+.classpath
+.settings/
+.loadpath
+.buildpath
+*.swp
+/vendor/
+composer.lock
+.idea/
+/cache/

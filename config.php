@@ -10,6 +10,14 @@ define("MAX_CHECK_NUM", 10);
 $proxy = DIR."cache/proxy/".date("Ymd");
 $proxy_tmp = DIR."cache/proxy/tmp";
 
+if(!is_dir(dirname($proxy)))
+{
+    mkdir(DIR."cache/task/", 0777, true);
+    mkdir(DIR."cache/proxy/", 0777, true);
+    mkdir(DIR."cache/result/", 0777, true);
+    mkdir(DIR."cache/thread/", 0777, true);
+}
+
 //日志默认输出，可直接关闭
 function loger($msg, $level="INFO")
 {

@@ -18,5 +18,10 @@
 
 ###执行任务###
 
-1. 添加cache/task/xxx.task，一行一个url
+1. 添加cache/task/search_engine.task，一行一个url，如
+
+>http://baidu.com/
+>
+>http://google.com/
+
 2. php index.php

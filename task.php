@@ -51,20 +51,23 @@ function runtask($url, $proxys)
 
         if($result != false && $code >= 200 && $code < 503)
         {
+            //获取响应的头信息，统计业务已经足够了
+            $header = format_header($result);
+            $header["url"] = $url;
+            $header["time"] = time();
+            $header["date"] = date("Y-m-d\TH:i:s\Z", $header["time"]);
+            list($header["ip"]) = explode(":", $proxy);
+
             //写入结果
-            $dir = DIR."cache/result/".date("Ymd")."/".$md5;
+            $dir = DIR."cache/result/".date("Ymd")."/".substr($md5, 0, 2);
             if(!is_dir($dir))
                 mkdir($dir, 0777, true);
-            $file = sprintf("%s/%s.%s.json", $dir, substr($proxy, 0, strpos($proxy, ":")), time());
-            file_put_contents($file,
-                sprintf("%s\n%s\n%s", $url, $proxy, $result)
-            );
+            $file = sprintf("%s/%s.json", $dir, $md5);
+            file_put_contents($file, json_encode($header)."\n", FILE_APPEND | LOCK_EX);
         }else{
-            //loger("curl -I '{$url}' -x '{$proxy}'; retry {$retry}");
             $retry ++;
             $result = false;
         }
-
     }
 
     //进程结束，删除进程符号
@@ -104,4 +107,20 @@ function thread_count($set=null, $delete=null)
     }
 
     return true;
+}
+
+function format_header($string)
+{
+    $header = ["Content-Type", "Content-Length", "CF-Cache-Status"];
+
+    $match = [];
+    $match["code"] = getCode($string);
+    list($match["protocol"]) = explode(" {$match['code']} ", $string);
+
+    foreach ($header as $key => $value) {
+        preg_match("@{$value}:\s?(.*)@i", $string, $result);
+        $match[$value] = trim($result[1]);
+    }
+
+    return $match;
 }

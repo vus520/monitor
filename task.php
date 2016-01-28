@@ -119,7 +119,7 @@ function format_header($string)
 
     foreach ($header as $key => $value) {
         preg_match("@{$value}:\s?(.*)@i", $string, $result);
-        $match[$value] = trim($result[1]);
+        $match[$value] = isset($result[1]) ? trim($result[1]) : "";
     }
 
     return $match;

@@ -60,8 +60,6 @@ if(empty($task))
                 $return = runtask($url, $proxy);
 
                 loger($url . "->" . substr($return, 0, strpos($return, "\n")));
-                print_r($return);
-
 
                 //子进程完成一定要结束掉进程，否则进程会越来越多
                 exit;
